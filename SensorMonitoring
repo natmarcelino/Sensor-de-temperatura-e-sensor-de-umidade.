@@ -1,0 +1,49 @@
+public class SensorMonitoring {
+
+    public static void main(String[] args) {
+        Thread temperatureThread = new Thread(new TemperatureSensor());
+        Thread humidityThread = new Thread(new HumiditySensor());
+
+        temperatureThread.start();
+        humidityThread.start();
+
+        try {
+            temperatureThread.join();
+            humidityThread.join();
+        } catch (InterruptedException e) {
+            System.err.println("Erro ao aguardar as threads: " + e.getMessage());
+        }
+
+        System.out.println("Monitoramento de sensores concluído!");
+    }
+}
+
+class TemperatureSensor implements Runnable {
+    @Override
+    public void run() {
+        for (int i = 1; i <= 5; i++) {
+            try {
+                int temperature = (int) (20 + Math.random() * 10);
+                System.out.println("Sensor de Temperatura: " + temperature + "°C");
+                Thread.sleep(1000); // Aguardar 1 segundo
+            } catch (InterruptedException e) {
+                System.err.println("Erro na thread do Sensor de Temperatura: " + e.getMessage());
+            }
+        }
+    }
+}
+
+class HumiditySensor implements Runnable {
+    @Override
+    public void run() {
+        for (int i = 1; i <= 5; i++) {
+            try {
+                int humidity = (int) (40 + Math.random() * 20);
+                System.out.println("Sensor de Umidade: " + humidity + "%");
+                Thread.sleep(1500); // Aguardar 1,5 segundo
+            } catch (InterruptedException e) {
+                System.err.println("Erro na thread do Sensor de Umidade: " + e.getMessage());
+            }
+        }
+    }
+}
